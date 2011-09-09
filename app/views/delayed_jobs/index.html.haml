@@ -1,0 +1,107 @@
+#refresh_area
+  Auto refresh
+  %input#refresh_on{:type =>"checkbox", :checked =>true}
+%h1 Delayed Job Dashboard
+#tabs
+  %ul
+    %li
+      %a{:href=>"#{delayed_job_dashboard.wip_delayed_jobs_path}"}
+        Running
+        %span#count_wip.counter 0
+    %li
+      %a{:href=>"#{delayed_job_dashboard.failing_delayed_jobs_path}"}
+        Failing
+        %span#count_failing.counter 0
+    %li
+      %a{:href=>"#{delayed_job_dashboard.overdue_delayed_jobs_path}"}
+        Overdue
+        %span#count_overdue.counter 0
+    %li
+      %a{:href=>"#{delayed_job_dashboard.future_delayed_jobs_path}"}
+        Future
+        %span#count_future.counter 0
+    %li
+      %a{:href=>"#tabs-config"}
+        Configuration
+  #tabs-config
+    %table.label_left
+      %tr
+        %th sleep_delay
+        %td= Delayed::Worker.sleep_delay
+      %tr
+        %th max_attempts
+        %td= Delayed::Worker.max_attempts
+      %tr
+        %th max_run_time
+        %td= Delayed::Worker.max_run_time
+      %tr
+        %th default_priority
+        %td= Delayed::Worker.default_priority
+      %tr
+        %th delay_jobs
+        %td= Delayed::Worker.delay_jobs
+      %tr
+        %th destroy_failed_jobs
+        %td= Delayed::Worker.destroy_failed_jobs
+#show_job
+  #job_contents
+
+:javascript
+  check_every = 5000;
+  check_count = 50;
+  current_tab = 0;
+  function maybe_reload(){
+    if ( $("#refresh_on").attr("checked")){
+      reload_counts();
+      check_count -= 1;
+      if ( check_count == 0 ){
+        $("#refresh_on").trigger('click');
+      }
+    }
+    window.setTimeout("maybe_reload()", check_every );
+  }
+
+  $(function(){
+    $("#tabs").tabs({spinner: "",
+      show: function(event, ui){
+        current_tab = ui.index;
+      }
+    });
+    reload_counts();
+    
+    $("#tabs").bind('tabsselect',function(event, ui){
+      //alert(ui.tab + " - "+ ui.panel.id )
+      current_tab = ui.index;
+      reload_counts()
+    });
+    $("#reload").click( function(){
+      $.ajax({
+        url: "#{delayed_job_dashboard.counts_delayed_jobs_path}",
+        dataType: "script"
+      });
+    });
+    $("#show_job").dialog({
+      title:"Job Details",
+      autoOpen: false,
+      position: [ 100,100] ,
+      width: 800});
+    $("#refresh_on").click( function(){
+      // reset the counter, doesnt' matter if it's off or on
+      check_count = 50
+    });
+    window.setTimeout("maybe_reload()", check_every );
+  });
+  function reload_counts(){
+    $.ajax({
+      url: "#{delayed_job_dashboard.counts_path}",
+      dataType: "script"
+    });
+    //alert("current is "+current_tab);
+    $("#tabs").tabs("load", current_tab);
+
+  }
+  function open_job(url){
+    $("#show_job").dialog("open");
+    $("#job_contents").load(url );
+    return false;
+  }

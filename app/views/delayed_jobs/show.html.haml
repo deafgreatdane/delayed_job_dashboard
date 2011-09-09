@@ -1,0 +1,45 @@
+
+%table.label_left
+  %tr
+    %th ID
+    %td= @job.id
+  %tr
+    %th Name
+    %td= @job.name
+  %tr
+    %th Attempts
+    %td= @job.attempts
+  %tr
+    %th Run at
+    %td= @job.run_at
+  %tr
+    %th Locked At
+    %td= @job.locked_at
+  %tr
+    %th Locked By
+    %td= @job.locked_by
+  %tr
+    %th failed at
+    %td= @job.failed_at
+  %tr
+    %th created
+    %td= @job.created_at
+  %tr
+    %th updated
+    %td= @job.updated_at
+  %tr
+    %th Payload
+    %td
+      - if @job.payload_object.nil?
+        %i none
+      - elsif @job.payload_object.is_a?(Struct)
+        %ul
+          - @job.payload_object.each_pair do |sym,obj|
+            %li
+              %b= sym
+              = obj
+      - else
+        = @job.payload_object.inspect
+  %tr
+    %th Last Error
+    %td= display_error(@job)

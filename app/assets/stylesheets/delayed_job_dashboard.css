@@ -1,0 +1,36 @@
+/*
+ *= require_tree .
+*/
+body {
+    font-family:Verdana,Helvetica,sans-serif;
+}
+#refresh_area{
+    
+    float: right;
+    width: 150px;
+}
+.label_top TD {
+    vertical-align: top;
+    text-align: left;
+    padding-right: 20px;
+}
+.label_top TH {
+    vertical-align: top;
+    text-align: left;
+    border-bottom: 1px solid black;
+    padding-right: 10px;
+}
+.label_left TH {
+    text-align: right;
+    vertical-align: top;
+}
+.counter {
+    padding: 0px 8px;
+    background-color: #555555;
+    color: white;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
+    border-radius: 8px; 
+
+}

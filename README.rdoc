@@ -1,0 +1,58 @@
+= DelayedJobDashboard
+
+This engine provides a user interface for the {delayed_job}[https://github.com/collectiveidea/delayed_job] gem. Delayed_job
+(or DJ) is a powerful addition to any app that needs asynchronous processing, but it's tedious to troubleshoot what is
+happening, especially during development when errors are frequent. Features include
+* at a glance counts for running, failing, overdue, and future tasks
+* listing of jobs in each of those states
+* a job detail popup showing the payload object and last_error
+* auto refresh (every 5 seconds) of the counts and lists. For performance reasons, it will stop after 2 minutes, but
+  can be restarted
+
+=== Dashboard Screenshot
+link:screen1.png
+
+=== Job detail screenshot
+link:screen2.png
+
+This gem operates as a mountable engine, as such is only suitable for Rails 3.1 or greater.
+
+= Setup
+Assuming you already have DJ running on your app, add the dashboard to your Gemfile
+  gem 'delayed_job_dashboard'
+
+Then, mount the engine with a given url prefix in your <tt>routes.rb</tt>
+  YourApp::Application.routes.draw do
+    mount DelayedJobDashboard::Engine => "/djd"
+  end
+
+Finally, to get the asset pipeline to work, <tt>assets/javascripts/application.js</tt>, after the
+<tt>require_tree . </tt>, add
+  //= require delayed_job_dashboard
+
+= FAQ
+=== Can I control running jobs?
+Since the DJ Workers run in a completely different process, there is no practical way to
+connect to those threads and interupt them
+=== Can I manipulate pending jobs?
+Until there's a practical security model for the dashboard, it won't facilitate being a backdoor for
+hackers to mess with your application. Until then, <tt>rails console</tt> is your fried.
+=== What do the states mean? DJ doesn't have those states...
+The dashboard tries to give a view into the different records in your delayed_jobs table
+* running: records with a "locked_by", indicating a worker has reserved it and it is running
+* failing: any records with attempts > 1. If it failed once, it'll probably fail again...
+* overdue: any record with a run_at in the past. This will often include jobs that are running
+* future: any record with a run_at in the future
+
+=== Why can't it show completed jobs?
+DJ explicitly destroys successful jobs. Surely, it was a practical performance tweak.
+Perhaps this dashboard will influence a change to retain jobs for instrumentations purposes.
+
+= Todo
+* Figure out how to integrate with application security, such as cancan
+* More testing in real world scenarios
+* If DJ were enhanced to keep successful jobs, the dashboard could include metrics for running jobs, including
+  average wait time, execution time
+
+= License
+This gem is licensed under the  MIT-LICENSE.
