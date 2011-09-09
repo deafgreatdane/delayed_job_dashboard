@@ -10,10 +10,10 @@ happening, especially during development when errors are frequent. Features incl
   can be restarted
 
 === Dashboard Screenshot
-link:doc/screen1.png
+link:http://github.com/deafgreatdane/delayed_job_dashboard/raw/master/doc/screen1.png
 
 === Job detail screenshot
-link:doc/screen2.png
+link:http://github.com/deafgreatdane/delayed_job_dashboard/raw/master/doc/screen1.png
 
 This gem operates as a mountable engine, as such is only suitable for Rails 3.1 or greater.
 
