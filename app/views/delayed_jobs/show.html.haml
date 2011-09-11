@@ -37,7 +37,11 @@
           - @job.payload_object.each_pair do |sym,obj|
             %li
               %b= sym
-              = obj
+              - if obj.is_a?(ActiveRecord::Base)
+                = obj.class
+                = " id=#{obj.id}"
+              - else
+                = obj
       - else
         = @job.payload_object.inspect
   %tr
