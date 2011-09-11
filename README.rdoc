@@ -9,11 +9,7 @@ happening, especially during development when errors are frequent. Features incl
 * auto refresh (every 5 seconds) of the counts and lists. For performance reasons, it will stop after 2 minutes, but
   can be restarted
 
-=== Dashboard Screenshot
-link:http://github.com/deafgreatdane/delayed_job_dashboard/raw/master/doc/screen1.png
-
-=== Job detail screenshot
-link:http://github.com/deafgreatdane/delayed_job_dashboard/raw/master/doc/screen2.png
+Screenshots can be {seen on the wiki}[https://github.com/deafgreatdane/delayed_job_dashboard/wiki]
 
 This gem operates as a mountable engine, as such is only suitable for Rails 3.1 or greater.
 
