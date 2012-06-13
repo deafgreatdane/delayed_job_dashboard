@@ -8,39 +8,54 @@ class DelayedJobsController < ActionController::Base
       @job = Delayed::Job.find(params[:id])
       render :layout =>nil
     rescue ActiveRecord::RecordNotFound => rnf
-      render :text =>"Not found, maybe it finished?"
-      return
-
-    #handle Exception => e
-    #  puts e
-    #rescue
-    #  #  render :text =>"Not found, maybe it finished?"
-    #  #  return
+      render :text => "Not found, maybe it finished?"
     end
   end
   def counts
-    @wip_counts = Delayed::Job.where("locked_by is not null").length
-    @failing_counts = Delayed::Job.where("attempts > 1").length
-    @overdue_counts = Delayed::Job.where("run_at < ?", Time.now).length
-    @future_counts = Delayed::Job.where("run_at >= ?", Time.now).length
+    @wip_counts     = wip_jobs.count
+    @failing_counts = failing_jobs.count
+    @overdue_counts = overdue_jobs.count
+    @future_counts  = future_jobs.count
   end
 
   def wip
-    @jobs = Delayed::Job.where("locked_by is not null")
+    @jobs = wip_jobs
     render :layout =>nil
   end
   def failing
-    @jobs = Delayed::Job.where("attempts > 1")
+    @jobs = failing_jobs
     render :layout =>nil
-
   end
   def overdue
-    @jobs = Delayed::Job.where("run_at < ?", Time.now)
+    @jobs = overdue_jobs
     render :layout =>nil
   end
   def future
-    @jobs = Delayed::Job.where("run_at >= ?", Time.now)
+    @jobs = future_jobs
     render :layout =>nil
+  end
 
+  private
+
+  def wip_jobs
+    Delayed::Job.
+      where("locked_by is not null").
+      where("attempts < ?", Delayed::Worker.max_attempts)
+  end
+  def failing_jobs
+    Delayed::Job.
+      where("attempts >= 1").
+      where("locked_by is null").
+      where("failed_at is not null")
+  end
+  def overdue_jobs
+    Delayed::Job.
+      where("run_at < ?", Time.now).
+      where("locked_by is null").
+      where("failed_at is null")
+  end
+  def future_jobs
+    Delayed::Job.
+      where("run_at >= ?", Time.now)
   end
 end
