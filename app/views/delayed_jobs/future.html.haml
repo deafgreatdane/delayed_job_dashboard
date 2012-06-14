@@ -4,6 +4,7 @@
   %table.label_top
     %thead
       %tr
+        %th Priority
         %th Name
         %th Run at
         %th created
@@ -11,6 +12,7 @@
     %tbody
       - @jobs.each do |job|
         %tr
+          %td= job.priority
           %td= link_to "#{job.name} ##{job.id}", "javascript:open_job('#{delayed_job_dashboard.delayed_job_path(job)}')"
           %td
             = job.run_at
@@ -18,5 +20,3 @@
             = time_ago_in_words(job.run_at)
             )
           %td= job.created_at
-
-
