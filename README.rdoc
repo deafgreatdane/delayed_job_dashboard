@@ -32,7 +32,7 @@ Since the DJ Workers run in a completely different process, there is no practica
 connect to those threads and interupt them
 === Can I manipulate pending jobs?
 Until there's a practical security model for the dashboard, it won't facilitate being a backdoor for
-hackers to mess with your application. Until then, <tt>rails console</tt> is your fried.
+hackers to mess with your application. Until then, <tt>rails console</tt> is your friend.
 === What do the states mean? DJ doesn't have those states...
 The dashboard tries to give a view into the different records in your delayed_jobs table
 * running: records with a "locked_by", indicating a worker has reserved it and it is running
