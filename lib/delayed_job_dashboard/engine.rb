@@ -7,7 +7,7 @@ module DelayedJobDashboard
     paths["app"]
 
     initializer :assets do |config|
-      Rails.application.config.assets.precompile += %w( delayed_job_dashboard.css )
+      Rails.application.config.assets.precompile += %w( delayed_job_dashboard.css delayed_job_dashboard.js)
     end
   end
 end

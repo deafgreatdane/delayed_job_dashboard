@@ -22,10 +22,6 @@ Then, mount the engine with a given url prefix in your <tt>routes.rb</tt>
     mount DelayedJobDashboard::Engine => "/djd"
   end
 
-Finally, to get the asset pipeline to work, <tt>assets/javascripts/application.js</tt>, after the
-<tt>require_tree . </tt>, add
-  //= require delayed_job_dashboard
-
 = FAQ
 === Can I control running jobs?
 Since the DJ Workers run in a completely different process, there is no practical way to
