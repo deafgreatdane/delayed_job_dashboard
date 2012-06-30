@@ -46,5 +46,7 @@ Perhaps this dashboard will influence a change to retain jobs for instrumentatio
 * If DJ were enhanced to keep successful jobs, the dashboard could include metrics for running jobs, including
   average wait time, execution time
 
+= Contributors
+* {Jeremy D. Frens}[https://github.com/jdfrens]
 = License
 This gem is licensed under the  MIT-LICENSE.
