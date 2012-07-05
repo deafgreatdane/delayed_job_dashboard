@@ -45,7 +45,6 @@ class DelayedJobsController < ActionController::Base
   def failing_jobs
     Delayed::Job.
       where("attempts >= 1").
-      where("locked_by is null").
       where("failed_at is not null")
   end
   def overdue_jobs
